@@ -3,7 +3,15 @@
 This is just a small helper crate to parse strings using a similar syntax as used in the `println!` macro.
 
 ## Installation
-Run `cargo add https://github.com/albheim/parseline` in the project you want this in.
+To use this library in a project simply add
+```toml
+[dependencies]
+parseline = { git = "https://github.com/albheim/parseline" }
+```
+to your project `Cargo.toml` and then import parseline as
+```
+use parseline::parseln
+```
 
 ## Usage
 It can be used either with already defined variables as 
