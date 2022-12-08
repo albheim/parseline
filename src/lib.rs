@@ -27,11 +27,11 @@ pub fn split_line<'a>(string: &'a str, pattern: &str) -> Result<Vec<&'a str>, &'
 }
 
 #[macro_export]
-macro_rules! parseline {
-    ($line:expr, $pattern:literal) => {
+macro_rules! parseln {
+    ($line:expr, $pattern:expr) => {
         $crate::split_line($line, $pattern).expect("Failed to parse")
     };
-    ($line:expr, $pattern:literal, $($var:ident),+) => {
+    ($line:expr, $pattern:expr, $($var:ident),+) => {
         {
             let result = $crate::split_line($line, $pattern).expect("Failed to parse");
             let mut result_iter = result.iter();
@@ -40,8 +40,8 @@ macro_rules! parseline {
             )+
         }
     };
-    ($line:expr, $pattern:literal, $($var:ident:$type:ty),+) => {
-        let ($($var),+) = {
+    ($line:expr, $pattern:expr, $($var:ident:$type:ty),+) => {
+        let ($($var),+) = { // why does result not get overwritten even without this?
             let result = $crate::split_line($line, $pattern).expect("Failed to parse");
             let mut result_iter = result.iter();
             $(
@@ -71,7 +71,7 @@ mod tests {
 
     #[test]
     fn test_macro() {
-        let result = parseline!("#1 @ 23,45: 43x56", "#{} @ {},{}: {}x{}");
+        let result = parseln!("#1 @ 23,45: 43x56", "#{} @ {},{}: {}x{}");
         assert_eq!(result, vec!["1", "23", "45", "43", "56"]);
     }
 
@@ -82,7 +82,7 @@ mod tests {
         let c: f32;
         let d: String;
         let e: bool;
-        parseline!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a, b, c, d, e);
+        parseln!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a, b, c, d, e);
 
         assert_eq!(a, 1);
         assert_eq!(b, 'c');
@@ -94,7 +94,7 @@ mod tests {
     #[test]
     fn test_macro_text_var() {
         let text = "#1 @ c,1.44: firstxtrue";
-        parseline!(text, "#{} @ {},{}: {}x{}", a: i32, b: char, c: f32, d: String, e: bool);
+        parseln!(text, "#{} @ {},{}: {}x{}", a: i32, b: char, c: f32, d: String, e: bool);
 
         assert_eq!(a, 1);
         assert_eq!(b, 'c');
@@ -105,7 +105,7 @@ mod tests {
 
     #[test]
     fn test_macro_types() {
-        parseline!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String, e: bool);
+        parseln!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String, e: bool);
 
         assert_eq!(a, 1);
         assert_eq!(b, 'c');
@@ -117,7 +117,7 @@ mod tests {
     #[test]
     fn test_macro_not_overwrite() {
         let result = "hello";
-        parseline!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String, e: bool);
+        parseln!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String, e: bool);
 
         assert_eq!(result, "hello");
     }
@@ -126,7 +126,7 @@ mod tests {
     #[test]
     #[ignore = "not yet implemented"]
     fn test_macro_underscore() {
-        parseline!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, _, c: f32, d: String, e: bool);
+        parseln!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, _, c: f32, d: String, e: bool);
 
         assert_eq!(a, 1);
         assert_eq!(c, 1.44);
@@ -138,18 +138,18 @@ mod tests {
     #[test]
     #[should_panic(expected = "Too many variables")]
     fn test_macro_panic_too_many_variables() {
-        parseline!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String, e: bool, f: i32);
+        parseln!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String, e: bool, f: i32);
     }
 
     #[test]
     #[should_panic(expected = "Incorrect type for captured variable")]
     fn test_macro_panic_incorrect_variable_type() {
-        parseline!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String, e: i32);
+        parseln!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String, e: i32);
     }
 
     #[test]
     #[should_panic(expected = "Failed to parse")]
     fn test_macro_panic_parse() {
-        parseline!("#1  c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String);
+        parseln!("#1  c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: u32, b: char, c: f32, d: String);
     }
 }
