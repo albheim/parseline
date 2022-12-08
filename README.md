@@ -12,7 +12,7 @@ parseline = { git = "https://github.com/albheim/parseline" }
 ```
 to your project `Cargo.toml` and then import parseline as
 ```
-use parseline::parseln
+use parseline::parseln;
 ```
 
 ## Usage
