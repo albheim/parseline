@@ -8,9 +8,9 @@ pub fn split_line<'a>(string: &'a str, pattern: &str) -> Result<Vec<&'a str>, &'
         if splits[i].chars().count() == 0 {
             if i + 1 == splits.len() {
                 results.push(&string[last_idx..]);
-                continue
+                continue;
             } else if i != 0 {
-                return Err("Invalid pattern, found consecutive captures {}{}.")
+                return Err("Invalid pattern, found consecutive captures {}{}.");
             }
         }
         match string.get(last_idx..).and_then(|s| s.find(splits[i])) {
@@ -21,24 +21,24 @@ pub fn split_line<'a>(string: &'a str, pattern: &str) -> Result<Vec<&'a str>, &'
                 }
                 last_idx = idx + splits[i].chars().count();
                 first = false;
-            },
+            }
             None => return Err("Could not match pattern to string."),
         }
     }
 
-    Ok(results) 
+    Ok(results)
 }
 
 /// parseln!(text, pattern, variables...)
-/// 
+///
 /// A println! counterpart for simple parsing problems.
-/// 
+///
 /// It uses a pattern where {} captures something, and is parsed to the type of the supplied variable.
 /// If two consecutive captures are included in the patter the call will panic.
 /// If too few variables are supplied the remaining captures are dropped, if too many are supplied the call will panic.
-/// 
+///
 /// ## Example
-/// It can be used either with already defined variables as 
+/// It can be used either with already defined variables as
 /// ```rust
 /// # use parseline::parseln;
 /// let month: String;
@@ -52,7 +52,7 @@ pub fn split_line<'a>(string: &'a str, pattern: &str) -> Result<Vec<&'a str>, &'
 /// parseln!("Date: apr 13", "Date: {} {}", month: String, day: i32);
 /// assert_eq!((month, day), (String::from("apr"), 13))
 /// ```
-/// 
+///
 /// Currently it is not possible to mix these methods.
 #[macro_export]
 macro_rules! parseln {
@@ -89,7 +89,6 @@ macro_rules! parseln {
     };
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -119,7 +118,15 @@ mod tests {
         let c: f32;
         let d: String;
         let e: bool;
-        parseln!("#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a, b, c, d, e);
+        parseln!(
+            "#1 @ c,1.44: firstxtrue",
+            "#{} @ {},{}: {}x{}",
+            a,
+            b,
+            c,
+            d,
+            e
+        );
 
         assert_eq!(a, 1);
         assert_eq!(b, 'c');
@@ -130,7 +137,15 @@ mod tests {
 
     #[test]
     fn test_macro_inside_vars() {
-        parseln!( "#1 @ c,1.44: firstxtrue", "#{} @ {},{}: {}x{}", a: i32, b: char, c: f32, d: String, e: bool);
+        parseln!(
+            "#1 @ c,1.44: firstxtrue",
+            "#{} @ {},{}: {}x{}",
+            a: i32,
+            b: char,
+            c: f32,
+            d: String,
+            e: bool
+        );
 
         assert_eq!(a, 1);
         assert_eq!(b, 'c');
