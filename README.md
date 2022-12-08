@@ -27,5 +27,11 @@ or by generating new binding, though then we need to supply the type to be parse
 parseln!("Date: apr 13", "Date: {} {}", month: String, day: i32);
 ```
 
+## TODO
+* Currently it is not possible to mix these methods.
+* Allow for writing to references, automatically dereference?
+* cargo doc?
+* Don't do split->collect->iter, check [macro book](https://veykril.github.io/tlborm/decl-macros/macros-methodical.html) for tips on how to do indexing in repeating macros.
+
 ## Disclaimer
 This is the first crate I have made and it was mostly as a learning experience. I needed some parsing for *Advent of Code* and thought regular expressions were overkill, and learning how to set up a crate with tests as well as figuring out how to create the needed macro was interesting to try.

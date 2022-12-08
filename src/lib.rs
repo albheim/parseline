@@ -1,3 +1,9 @@
+#![warn(missing_docs)]
+
+//! Provides a single macro `parseln!` as a counterpart to `println!`, parsing text with a similar syntax used for printing.
+
+/// Internal function to capture parts of a string according to a pattern.
+#[doc(hidden)]
 pub fn split_line<'a>(string: &'a str, pattern: &str) -> Result<Vec<&'a str>, &'static str> {
     let mut results = vec![];
     let mut last_idx = 0;
@@ -29,15 +35,13 @@ pub fn split_line<'a>(string: &'a str, pattern: &str) -> Result<Vec<&'a str>, &'
     Ok(results)
 }
 
-/// parseln!(text, pattern, variables...)
-///
 /// A println! counterpart for simple parsing problems.
 ///
 /// It uses a pattern where {} captures something, and is parsed to the type of the supplied variable.
 /// If two consecutive captures are included in the patter the call will panic.
 /// If too few variables are supplied the remaining captures are dropped, if too many are supplied the call will panic.
 ///
-/// ## Example
+/// ## Examples
 /// It can be used either with already defined variables as
 /// ```rust
 /// # use parseline::parseln;
@@ -52,8 +56,6 @@ pub fn split_line<'a>(string: &'a str, pattern: &str) -> Result<Vec<&'a str>, &'
 /// parseln!("Date: apr 13", "Date: {} {}", month: String, day: i32);
 /// assert_eq!((month, day), (String::from("apr"), 13))
 /// ```
-///
-/// Currently it is not possible to mix these methods.
 #[macro_export]
 macro_rules! parseln {
     ($line:expr, $pattern:expr) => {
