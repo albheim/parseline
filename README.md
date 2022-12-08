@@ -1,6 +1,6 @@
 # parseln! - a println! counterpart
 
-![example workflow](https://github.com/albheim/parseline/actions/workflows/check-and-lint.yaml/badge.svg) ![example workflow](https://github.com/albheim/parseline/actions/workflows/test.yaml/badge.svg) [![codecov](https://codecov.io/gh/albheim/parseline/branch/main/graph/badge.svg?token=SLIHSUWHT2)](https://codecov.io/gh/albheim/parseline)
+[![Test with Code Coverage](https://github.com/albheim/parseline/actions/workflows/test.yaml/badge.svg)](https://github.com/albheim/parseline/actions/workflows/test.yaml) [![Check and Lint](https://github.com/albheim/parseline/actions/workflows/check-and-lint.yaml/badge.svg)](https://github.com/albheim/parseline/actions/workflows/check-and-lint.yaml) [![codecov](https://codecov.io/gh/albheim/parseline/branch/main/graph/badge.svg?token=SLIHSUWHT2)](https://codecov.io/gh/albheim/parseline)
 
 A small helper crate to parse strings using a similar syntax as used in the `println!` macro.
 
